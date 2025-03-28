@@ -37,3 +37,21 @@ def get_recipe_by_id(recipe_id:str):
         if recipe["id"] == recipe_id:
             return recipe
     return{"message" : "Recipe not found"}
+
+@app.put("/recipes/{recipe_id}")
+def update_recipe_id(recipe_id:str, recipe: Recipe):
+    for idx, existing_recipe in enumerate(recipes):
+        if existing_recipe['id'] == recipe_id:
+            updated_recipe = recipe.model_dump()
+            updated_recipe['id'] = recipe_id
+            recipes[idx] = updated_recipe
+            return{"message": "Recipe updated", "recipe": updated_recipe}
+    return{"message": "Recipe not found"}
+
+@app.delete("/recipes/{recipe_id}")
+def delete_recipe_id(recipe_id:str):
+    for idx, existing_recipe in enumerate(recipes):
+        if existing_recipe["id"] == recipe_id:
+            deleted_recipe = recipes.pop(idx)
+            return {"message": "Recipe deleted", "recipe": deleted_recipe}
+    return {"message": "Recipe not found"}          
